@@ -15,6 +15,7 @@ contract Lottery {
 
     function enter() public payable {
         // 50USD minimum
+        require(msg.value >= getEntranceFee(), "Not enouth ETH!");
         players.push(msg.sender);
     }
 
