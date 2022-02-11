@@ -1,4 +1,5 @@
 from filecmp import DEFAULT_IGNORES
+
 from brownie import (
     LinkToken,
     VRFCoordinatorMock,
@@ -6,6 +7,8 @@ from brownie import (
     network,
     config,
     accounts,
+    interface,
+    Contract,
 )
 from web3 import Web3
 
@@ -71,3 +74,16 @@ def deploy_mocks(decimals=DECIMALS, initial_value=INITIAL_VALUE):
     link_token = LinkToken.deploy({"from": account})
     VRFCoordinatorMock.deploy(link_token.address, {"from": account})
     print("Deployed!")
+
+
+def fund_with_link(
+    contract_address, account=None, link_token=None, amount=100000000000000000
+):  # 0.1 LINK
+    account = account if account else get_account()
+    link_token = link_token if link_token else get_contract("link_token")
+    link_token_smartcontract = interface.LinkTokenInterface(
+        link_token.address,
+    )
+    link_token_smartcontract.wait(1)
+    print("Fund contract!")
+    return link_token_smartcontract
