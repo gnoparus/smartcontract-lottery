@@ -17,7 +17,7 @@ FORKED_LOCAL_ENVIRONMENTS = ["mainnet-fork", "mainnet-fork-dev"]
 LOCAL_BLOCKCHAIN_ENVIRONMENTS = ["development", "ganache-local"]
 
 DECIMALS = 8
-INITIAL_VALUE = 3200 * 10**10
+INITIAL_VALUE = 3200 * 10**DECIMALS
 
 
 def get_account(index=None, id=None):
@@ -51,12 +51,12 @@ def get_contract(contract_name):
     if network.show_active() in LOCAL_BLOCKCHAIN_ENVIRONMENTS:
         if len(contract_type) <= 0:
             deploy_mocks()
-        # MockV3Aggregator[-1 ]
+        # MockV3Aggregator[-1 ] , VRFCoordinatorMock , LinkToken
         contract = contract_type[-1]
     else:
         contract_address = config["networks"][network.show_active()][contract_name]
         contract = Contract.from_abi(
-            contract_type, _name, contract_address, contract_type.abi
+            contract_type, contract_name, contract_address, contract_type.abi
         )
     return contract
 
