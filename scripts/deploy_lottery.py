@@ -1,5 +1,6 @@
 from brownie import Lottery, accounts, config, network
 from scripts.helpful_scripts import fund_with_link, get_account, get_contract
+import time
 
 
 def deploy_lottery():
@@ -41,8 +42,9 @@ def end_lottery():
 
     end_tx = lottery.endLottery({"from": account})
     end_tx.wait(1)
+    time.sleep(60)
 
-    print("You ended the lottery!")
+    print(f"{lottery.recentWinner()} is the winner.")
 
 
 def main():
