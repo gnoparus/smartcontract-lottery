@@ -80,10 +80,15 @@ def fund_with_link(
     contract_address, account=None, link_token=None, amount=100000000000000000
 ):  # 0.1 LINK
     account = account if account else get_account()
+
+    ### using contract
     link_token = link_token if link_token else get_contract("link_token")
-    link_token_smartcontract = interface.LinkTokenInterface(
-        link_token.address,
-    )
-    link_token_smartcontract.wait(1)
+    tx = link_token.transfer(contract_address, amount, {"from": account})
+
+    ### using interface
+    # link_token_smartcontract = interface.LinkTokenInterface(link_token.address)
+    # tx = link_token_smartcontract.transfer(contract_address, amount, {"from": account})
+
+    tx.wait(1)
     print("Fund contract!")
-    return link_token_smartcontract
+    return tx
